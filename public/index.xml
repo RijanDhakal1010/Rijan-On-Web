@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My New Hugo Site</title>
+    <link>http://example.org/</link>
+    <description>Recent content on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A quick and easy way to grab tables from websites with BeautifulSoup and Pandas in Python.</title>
+      <link>http://example.org/a-quick-and-easy-way-to-grab-tables-from-websites-with-beautifulsoup-and-pandas-in-python./</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/a-quick-and-easy-way-to-grab-tables-from-websites-with-beautifulsoup-and-pandas-in-python./</guid>
+      <description>For those of you who are somewhat familiar with BeautifulSoup and are comfortable enough to read throgh the script and comments, the script I used is as follows. The hints in the comments should guide you through the script. If you want a step by step breakdown, I have put it below the whole script.
+Here is the code without comments. (The code with comments is right below)
+import requests from lxml import html from bs4 import BeautifulSoup import pandas as pd headers_1 = {&amp;#39;Accept-Encoding&amp;#39;: &amp;#39;identity&amp;#39;, &amp;#39;User-Agent&amp;#39;: &amp;#39;Mozilla/5.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="For those of you who are somewhat familiar with BeautifulSoup and are comfortable enough to read throgh the script and comments, the script I used is as follows. The hints in the comments should guide you through the script. If you want a step by step breakdown, I have put it below the whole script.
+Here is the code without comments. (The code with comments is right below)
+import requests from lxml import html from bs4 import BeautifulSoup import pandas as pd headers_1 = {&#39;Accept-Encoding&#39;: &#39;identity&#39;, &#39;User-Agent&#39;: &#39;Mozilla/5.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="A quick and easy way to grab tables from websites with BeautifulSoup and Pandas in Python." />
+<meta property="og:description" content="For those of you who are somewhat familiar with BeautifulSoup and are comfortable enough to read throgh the script and comments, the script I used is as follows. The hints in the comments should guide you through the script. If you want a step by step breakdown, I have put it below the whole script.
+Here is the code without comments. (The code with comments is right below)
+import requests from lxml import html from bs4 import BeautifulSoup import pandas as pd headers_1 = {&#39;Accept-Encoding&#39;: &#39;identity&#39;, &#39;User-Agent&#39;: &#39;Mozilla/5." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/a-quick-and-easy-way-to-grab-tables-from-websites-with-beautifulsoup-and-pandas-in-python./" /><meta property="article:section" content="" />
+
+
+
+<title>A quick and easy way to grab tables from websites with BeautifulSoup and Pandas in Python. | My New Hugo Site</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.6ca43d936c6e070805dd315f249b2c36594ec05d2a188ab9d6913ed887b1819e.js" integrity="sha256-bKQ9k2xuBwgF3TFfJJssNllOwF0qGIq51pE&#43;2IexgZ4=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>My New Hugo Site</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>A quick and easy way to grab tables from websites with BeautifulSoup and Pandas in Python.</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>For those of you who are somewhat familiar with <code>BeautifulSoup</code> and are comfortable enough to read throgh the script and comments, the script I used is as follows. The hints in the comments should guide you through the script. If you want a step by step breakdown, I have put it below the whole script.</p>
+<p>Here is the code without comments. (The code with comments is right below)</p>
+<pre tabindex="0"><code>
+import requests
+from lxml import html
+from bs4 import BeautifulSoup
+import pandas as pd
+
+
+headers_1 = {&#39;Accept-Encoding&#39;: &#39;identity&#39;, &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1)&#39;} 
+connection_one = requests.get(&#39;http://www.onekp.com/public_data.html&#39;, headers = headers_1) 
+soup_object = BeautifulSoup(connection_one.content,features=&#34;lxml&#34;) 
+
+table = soup_object.find(&#39;table&#39;) 
+rows = table.findAll(lambda tag: tag.name==&#39;tr&#39;) 
+
+l =[] 
+
+for tr in rows: 
+    td = tr.find_all(&#39;td&#39;) 
+    row = [] 
+    for tr in td: 
+        
+        try: 
+            ref = tr.find(&#39;a&#39;,href=True) 
+            i = ref[&#39;href&#39;] 
+            row.append(i) 
+        except: 
+            i = tr.text
+            row.append(i)
+    l.append(row)
+df = pd.DataFrame(l) 
+
+df.to_csv(&#39;Onekp_data.tsv&#39;,sep=&#39;\t&#39;) 
+</code></pre><p>Here is the code with comments.</p>
+<pre tabindex="0"><code># the following libraries are need for this script to work
+import requests
+from lxml import html
+from bs4 import BeautifulSoup
+import pandas as pd
+
+# The following three lines will make the code able to access the file on the internet. The following three lines currently work but I am not sure if the setup is sustainable. It is a patchwork of patchworks that may or may not keep working.
+
+headers_1 = {&#39;Accept-Encoding&#39;: &#39;identity&#39;, &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1)&#39;} # this is need to save us from being hit with captcha
+connection_one = requests.get(&#39;http://www.onekp.com/public_data.html&#39;, headers = headers_1) # this is the website
+soup_object = BeautifulSoup(connection_one.content,features=&#34;lxml&#34;) # this create a soup object that we will parse
+
+table = soup_object.find(&#39;table&#39;) # The table that I am working with has only one so I am using find but you can use findAll to find tables.
+
+rows = table.findAll(lambda tag: tag.name==&#39;tr&#39;) # This converts each row in my table into a row that can be parsed. I understand &#39;tr&#39; to mean table row in html but not sure. 
+
+l =[] # this is the list that we will make a dataframe out of.
+
+for tr in rows: # here we are going through the loopable &#39;rows&#39; object that we made a second ago
+    td = tr.find_all(&#39;td&#39;) # This goes through the individual rows in the tr objects and makes the members of the rows loopable.
+    row = [] # this is to hold each new row items and emptied out each time for a new row to come in.
+    for tr in td: # we made an object td that has all the items in each row, but those are html lines and not the information we need or at least it has more information than we really need.
+        #ref= tr.find_all(&#39;a&#39;,href=True)
+        try: # using the try method in python makes it much easier to handle error. Errors such as empty cells, which ironaically I have not handled here but plan to do in the future.
+            ref = tr.find(&#39;a&#39;,href=True) # this takes the individual item in thw row and makes it possible to go through the elements of the item, parsing HTML is wild stuff!
+            i = ref[&#39;href&#39;] # href stand for the hyperlink refernce which is what I need. Otherwise you will only get the text with &#39;tr.text&#39;. Some of my columns have hypterlinks, some of my columns have just text and I need to work around that. 
+            row.append(i) # append it to the &#39;row&#39; object that we made above
+        except: # some of the rows are text only so the ones that are rejected are sent below to have their text extracted
+            i = tr.text # extracts text
+            row.append(i) # appends item
+    l.append(row) # append the row
+df = pd.DataFrame(l) # makes a dataframe
+
+df.to_csv(&#39;Onekp_data.tsv&#39;,sep=&#39;\t&#39;) # this one makes a dataframe in the current directory.
+</code></pre><p>I was recently looking for a way to grab a table from an html site from the web as a pandas dataframe and what I found on google was not satisfactory. The fact of the matter is <code>BeautifulSoup</code> is an amazing package that makes a gargantuan task easy but it is not quite a one-liner package like <code>Pandas</code> and needs a little bit of preamble of code to work. So, if what you want to do deviates from tutorials AND if you do not know the aforementioned preamble you will have a not so nice time trying to do something as simple as making a dataframe out of a table on a website.</p>
+<p>So, I have documented a method that might make it easy for you to get this specific task done.</p>
+<p>Let&rsquo;s go through the steps then.</p>
+<h4 id="import-the-packages-that-we-will-need">
+  Import the packages that we will need.
+  <a class="anchor" href="#import-the-packages-that-we-will-need">#</a>
+</h4>
+<p>We will need the following packages for this to work. Use <code>pip</code> to install the ones you are missing with <code>pip install {insert package name here}</code>.</p>
+<pre tabindex="0"><code># the following libraries are need for this script to work
+import requests
+from lxml import html
+from bs4 import BeautifulSoup
+import pandas as pd
+</code></pre><h4 id="now-give-the-script-the-ability-to-servers-think-it-is-a-browser">
+  Now give the script the ability to servers think it is a browser.
+  <a class="anchor" href="#now-give-the-script-the-ability-to-servers-think-it-is-a-browser">#</a>
+</h4>
+<p>If I understood this correctly, servers can tell if they are being accessed by automated tools and want to discourage this (or something along the lines of that) and as such we have to make our script pretend it is a browser when it contacts the server or url of interest. The code below helps us do this.</p>
+<p>Here, try to leave the <code>headers_1 = {'Accept-Encoding': 'identity', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1)'}</code> line as is. This gives your script a mask that it can use on the server.</p>
+<p>As for the <code>url</code>, you can supply your own url as the first parameter to the <code>connection_one</code> object. You will then supply the <code>connection_one</code> object to BeautifulSoup itself.</p>
+<pre tabindex="0"><code># The following three lines will make the code able to access the file on the internet. The following three lines currently work but I am not sure if the setup is sustainable. It is a patchwork of patchworks that may or may not keep working.
+
+headers_1 = {&#39;Accept-Encoding&#39;: &#39;identity&#39;, &#39;User-Agent&#39;: &#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1)&#39;} # this is need to save us from being hit with captcha
+connection_one = requests.get(&#39;http://www.onekp.com/public_data.html&#39;, headers = headers_1) # this is the website
+soup_object = BeautifulSoup(connection_one.content,features=&#34;lxml&#34;) # this create a soup object that we will parse
+</code></pre><h4 id="get-the-tables-on-the-website">
+  Get the tables on the website.
+  <a class="anchor" href="#get-the-tables-on-the-website">#</a>
+</h4>
+<p>You can/should get tables from a webpage ,among others, two of the following ways:</p>
+<p>Using <code>find</code></p>
+<pre tabindex="0"><code>table = soup_object.find(&#39;table&#39;) # The table that I am working with has only one so I am using find but you can use findAll to find tables.
+</code></pre><p>OR</p>
+<p>The website in this demo only has one table so find is fine but if your website has multiple tables use <code>findAll</code> (The <code>A</code> is capital).</p>
+<pre tabindex="0"><code>table = soup_object.findAll(&#39;table&#39;)
+</code></pre><p>If you had multiple tables, your tables would be indexed into a list and the first table would be accessed as <code>table[0]</code>, the second one as <code>table[1]</code> and so on.</p>
+<p>HTML element are strctured/named with a start tag, a end tag and some content in-between as</p>
+<pre tabindex="0"><code>&lt;table&gt;
+
+{some data here}
+
+&lt;/table&gt;
+</code></pre><p>And what we are doing with the <code>soup_object.find('{insert tag here}')</code> is to search and locate all the elements named table in our soup object.</p>
+<h4 id="now-to-go-through-a-table">
+  Now to go through a table
+  <a class="anchor" href="#now-to-go-through-a-table">#</a>
+</h4>
+<pre tabindex="0"><code>rows = table.findAll(lambda tag: tag.name==&#39;tr&#39;) # This converts each row in my table into a row that can be parsed. I understand &#39;tr&#39; to mean table row in html but not sure. 
+</code></pre><p>Your table in HTML is just like any other table, it is made up of columns and rows. And rows in a HTML table are defined with a <code>&lt;tr&gt;</code> start and a <code>&lt;/tr&gt;</code> end tag and just like a table tag, we can search for a row tag INSIDE of a <code>BeautifulSoup</code> table object.</p>
+<p>So, this line of code goes through our designated table and find all the row elements and assigns each row to the list called <code>rows</code>, a loopable list.</p>
+<h4 id="finally-going-through-the-cells-of-the-rows">
+  Finally going through the cells of the rows.
+  <a class="anchor" href="#finally-going-through-the-cells-of-the-rows">#</a>
+</h4>
+<p>Now the remainder of the code is somewhat of a monolith that does a few things at the same time. Let&rsquo;s go through it.</p>
+<pre tabindex="0"><code>l =[] 
+
+for tr in rows: 
+    td = tr.find_all(&#39;td&#39;) 
+    row = [] 
+    for tr in td: 
+        
+        try: 
+            ref = tr.find(&#39;a&#39;,href=True) 
+            i = ref[&#39;href&#39;] 
+            row.append(i) 
+        except: 
+            i = tr.text
+            row.append(i)
+    l.append(row)
+</code></pre><p>The function of <code>l = []</code> becomes clear later.</p>
+<p>Using the <code>for tr in rows</code> line we are going through the <code>rows</code> object we created earlier, i.e. each cell in the row. BUT that is not enough becuase each cell in each row is another HTML element, specifically the <code>td</code> element.</p>
+<p>So, for each <code>td</code> element we need to find a way to get into the <code>td</code> element and extract meanigful information out of the <code>HTML</code> markup. To do this we return to our good friend <code>find()</code> and supply it with the <code>td</code> parameter as <code>td = tr.find_all('td')</code>. This will give us all the elements in the <code>td</code> tag and put them in the list <code>td</code> for us to loop through.</p>
+<p>Now we create an empty list called <code>row</code>, to keep our <code>td</code> cell elements from each row. Which then sets us up to enter the last loop in our script.</p>
+<pre tabindex="0"><code>for tr in td: 
+        
+        try: 
+            ref = tr.find(&#39;a&#39;,href=True) 
+            i = ref[&#39;href&#39;] 
+            row.append(i) 
+        except: 
+            i = tr.text
+            row.append(i)
+    l.append(row)
+</code></pre><p>Here we loop through each cell of each row of each table. We are using the <code>try/except</code> method to filter out both <code>hrefs</code> (hyperlinks) and text. We try to find hyperlinks in the current cell element with <code>ref = tr.find('a',href=True)</code> (making a lsit of all the elements in each cell) and then using <code>i = ref['href']</code> to grab the hyperlink. If the hyperlinke is there we append it to the <code>row</code> we created in the preceeding line. If not we move on to extract just the text with <code>i = tr.text</code> and append the text to the <code>row</code>.
+We append each <code>row</code> to the list <code>l</code> we created above.</p>
+<h4 id="making-a-dataframe-out-of-the-list-of-lists">
+  Making a dataframe out of the list of lists
+  <a class="anchor" href="#making-a-dataframe-out-of-the-list-of-lists">#</a>
+</h4>
+<p>Now as we append each <code>row</code> to the <code>l</code> list, we create a massive list of lists, where each element is the row of a table/dataframe. This is something we can feed to <code>Pandas</code> to create a dataframe, which is exactly what <code>df = pd.DataFrame(l)</code>.</p>
+<p>And there you have your website table in pandas dataframe.</p>
+<h4 id="save-the-dataframe-to-file">
+  Save the dataframe to file
+  <a class="anchor" href="#save-the-dataframe-to-file">#</a>
+</h4>
+<p>You can save your dataframe to file with <code>df.to_csv('Onekp_data.tsv',sep='\t')</code>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
